@@ -69,7 +69,7 @@ class RailsTranslateRoutes
 
   attr_accessor :specific_routes
   def specific_routes
-    @specific_routes ||= Rails.Application.routes
+    @specific_routes ||= Rails.application.routes
   end
 
   class << self
