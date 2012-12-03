@@ -215,6 +215,17 @@ All you need to do is to add rails-translate-routes to your engine gemspec and u
   # inside your engine/config/routes
   ActionDispatch::Routing::Translator.translate_from_file('config/locales/routes.yml', { :custom_route_set => MyEngine::Engine.routes })
 
+### Uniq Translated root
+
+When your routes are translated, you usually get two working urls for the root_path
+
+  '/en' and '/en/'
+
+If you want to unify this and get only one url, for SOE purpose for example, simply add the uniq_translated_root to your init call:
+
+  # inside your app/routes
+  ActionDispatch::Routing::Translator.translate_from_file('config/locales/routes.yml', { :uniq_translated_root => true })
+
 ## Translation YAML options
 
 By default translations of routes are specified on a single YAML file (e.g: in `config/locales/routes.yml`), but in some cases you might want to split the routes translations on several files. For example having all application translations files a in folder per language:

@@ -75,6 +75,14 @@ class RailsTranslateRoutes
     @custom_route_set = custom_route_set
   end
 
+  def uniq_translated_root
+    @uniq_translated_root ||= false
+  end
+
+  def @uniq_translated_root= uniq_translated_root
+    @uniq_translated_root = uniq_translated_root
+  end
+
   class << self
     # Default locale suffix generator
     def locale_suffix locale
@@ -342,8 +350,8 @@ class RailsTranslateRoutes
       path_without_optional_segments = final_optional_segments ? path.gsub(final_optional_segments,'') : path
       path_segments = path_without_optional_segments.split("/")
       new_path = path_segments.map{ |seg| translate_path_segment(seg, locale) }.join('/')
-      puts new_path.length
-      new_path = "/#{locale}#{new_path || '/'}" if add_prefix?(locale)
+      new_path = (new_path && new_path.length > 0) ? : "/" if uniq_translated_root
+      new_path = "/#{locale}#{new_path}" if add_prefix?(locale)
       new_path = '/' if new_path.blank?
       final_optional_segments ? new_path + final_optional_segments : new_path
     end
@@ -406,6 +414,7 @@ module ActionDispatch
           r.no_prefixes = true if options && options[:no_prefixes] == true
           r.keep_untranslated_routes = true if options && options[:keep_untranslated_routes] == true
           r.custom_route_set = options[:custom_route_set] if options
+          r.uniq_translated_root = options[:uniq_translated_root] if options
           r.translate r.custom_route_set
         end
 
