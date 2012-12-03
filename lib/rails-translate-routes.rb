@@ -79,7 +79,7 @@ class RailsTranslateRoutes
     @uniq_translated_root ||= false
   end
 
-  def @uniq_translated_root= uniq_translated_root
+  def uniq_translated_root= uniq_translated_root
     @uniq_translated_root = uniq_translated_root
   end
 
