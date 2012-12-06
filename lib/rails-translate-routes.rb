@@ -405,7 +405,6 @@ module ActionDispatch
           r.no_prefixes = true if options && options[:no_prefixes] == true
           r.keep_untranslated_routes = true if options && options[:keep_untranslated_routes] == true
           r.custom_route_set = options[:custom_route_set] if options
-          r.uniq_translated_root = options[:uniq_translated_root] if options
           r.translate r.custom_route_set
         end
 
