@@ -354,7 +354,7 @@ class RailsTranslateRoutes
         else
           translate ? translate_path_segment(s,locale) : s
         end
-      end.join(separator) + (final_optional_segments != "/" ? final_optional_segments : nil)
+      end.join(separator) + (final_optional_segments != "/" ? final_optional_segments : '')
     end
 
     # Tries to translate a single path segment. If the path segment
