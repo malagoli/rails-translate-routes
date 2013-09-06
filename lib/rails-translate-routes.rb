@@ -338,13 +338,23 @@ class RailsTranslateRoutes
 
     # Translates a path and adds the locale prefix.
     def translate_path path, locale
-      final_optional_segments = path.match(/(\(.+\))$/)[1] rescue nil   # i.e: (.:format)
-      path_without_optional_segments = final_optional_segments ? path.gsub(final_optional_segments,'') : path
-      path_segments = path_without_optional_segments.split("/")
-      new_path = path_segments.map{ |seg| translate_path_segment(seg, locale) }.join('/')
+      new_path = split_translate_join path, locale, [')','(','/'], false
+      new_path = split_translate_join path, locale, [')','(','/']
       new_path = "/#{locale}#{new_path || '/'}" if add_prefix?(locale)
       new_path = '/' if new_path.blank?
-      final_optional_segments ? new_path + final_optional_segments : new_path
+      new_path
+    end
+    
+    def split_translate_join(segment, locale, separators, translate = true)
+      separator = separators[0]
+      final_optional_segments = segment[Regexp.new("(#{'\\' + separator })$")] || ""
+      segment.split(separator).map do |s|
+        if separators[1..-1].any?
+          split_translate_join(s, locale, separators[1..-1], translate)
+        else
+          translate ? translate_path_segment(s,locale) : s
+        end
+      end.join(separator) + (final_optional_segments != "/" ? final_optional_segments : '')
     end
 
     # Tries to translate a single path segment. If the path segment
